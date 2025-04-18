@@ -134,7 +134,8 @@ public class GeminiController {
         if (pdfFile == null || pdfFile.isEmpty()) {
             String errorMessage = "PDF 파일이 제공되지 않았습니다. 'pdfFile' 또는 'pdfFileData' 필드를 통해 PDF 파일을 제공해주세요.";
             log.error("Error: {}", errorMessage);
-            return new GeminiChatResponse(errorMessage, messages);
+            messages.add(new GeminiMessage("system", errorMessage));
+            return new GeminiChatResponse(messages);
         }
         
         // MultipartFile 정보 출력
@@ -147,7 +148,7 @@ public class GeminiController {
         }
         
         Map.Entry<String, List<GeminiMessage>> result = geminiService.generateChatContentWithPdf(messages, pdfFile);
-        return new GeminiChatResponse(result.getKey(), result.getValue());
+        return new GeminiChatResponse(result.getValue());
     }
 
 } 

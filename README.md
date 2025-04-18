@@ -35,9 +35,9 @@ The application will start on port 8080.
 
 ```
 src/main/java/com/maru/     - Java source files
+  ├── config/               - configuration files
   ├── controllers/          - REST API controllers
   ├── models/               - Data models
-  ├── repositories/         - Database repositories
   ├── services/             - Business logic services
   └── MaruApplication.java  - Application entry point
 ```
@@ -45,6 +45,4 @@ src/main/java/com/maru/     - Java source files
 ## Technology Stack
 
 - Spring Boot 3.2.5
-- Spring Data JPA
-- H2 Database (for development)
 - Maven 3.8+

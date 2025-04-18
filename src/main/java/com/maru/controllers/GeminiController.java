@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +26,7 @@ import java.util.Map;
 public class GeminiController {
 
     private final GeminiService geminiService;
+    private static final Logger log = LoggerFactory.getLogger(GeminiController.class);
 
     public GeminiController(GeminiService geminiService) {
         this.geminiService = geminiService;
@@ -130,17 +133,17 @@ public class GeminiController {
         // PDF 파일이 없으면 오류 응답 반환
         if (pdfFile == null || pdfFile.isEmpty()) {
             String errorMessage = "PDF 파일이 제공되지 않았습니다. 'pdfFile' 또는 'pdfFileData' 필드를 통해 PDF 파일을 제공해주세요.";
-            System.out.println("Error: " + errorMessage);
+            log.error("Error: {}", errorMessage);
             return new GeminiChatResponse(errorMessage, messages);
         }
         
         // MultipartFile 정보 출력
         try {
-            System.out.println("PDF File name: " + pdfFile.getOriginalFilename());
-            System.out.println("PDF File size: " + pdfFile.getSize());
-            System.out.println("PDF File content type: " + pdfFile.getContentType());
+            log.info("PDF File name: {}", pdfFile.getOriginalFilename());
+            log.info("PDF File size: {}", pdfFile.getSize());
+            log.info("PDF File content type: {}", pdfFile.getContentType());
         } catch (Exception e) {
-            System.out.println("Error getting PDF file info: " + e.getMessage());
+            log.error("Error getting PDF file info: {}", e.getMessage());
         }
         
         Map.Entry<String, List<GeminiMessage>> result = geminiService.generateChatContentWithPdf(messages, pdfFile);
